@@ -1,4 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:workshop1/pages/secondpage.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: BMICalculator(),
+    );
+  }
+}
 
 class BMICalculator extends StatefulWidget {
   @override
@@ -12,12 +26,26 @@ class _BMICalculatorState extends State<BMICalculator> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: Padding(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('BMI Calculator'),
+        backgroundColor: Color.fromARGB(255, 129, 186, 250),
+      ),
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Image(
+              image: NetworkImage(
+                  'https://cdn4.iconfinder.com/data/icons/sambal/1000/leisure_gestures___meditation_meditate_zen_yoga_health_woman_sticker_people-64.png'),
+              width: 300.0,
+              height: 300.0,
+            ),
+            Text(
+              'Calculate BMI',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
             TextField(
               controller: heightController,
               keyboardType: TextInputType.number,
@@ -39,18 +67,9 @@ class _BMICalculatorState extends State<BMICalculator> {
             ElevatedButton(
               onPressed: () {
                 calculateBMI();
+                navigateToResultPage(); // เรียกใช้ฟังก์ชันนี้เมื่อคำนวณ BMI เสร็จสิ้น
               },
               child: Text('Calculate BMI'),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'BMI Result: ${bmiResult.toStringAsFixed(2)}',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 16),
-            Text(
-              getBMIStatus(),
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -75,17 +94,10 @@ class _BMICalculatorState extends State<BMICalculator> {
     });
   }
 
-  String getBMIStatus() {
-    if (bmiResult < 18.5) {
-      return 'Underweight';
-    } else if (bmiResult >= 18.5 && bmiResult <= 24.9) {
-      return 'Normal Weight';
-    } else if (bmiResult >= 25 && bmiResult <= 29.9) {
-      return 'Overweight';
-    } else if (bmiResult >= 30 && bmiResult <= 39.9) {
-      return 'Obese';
-    } else {
-      return 'Very Obese';
-    }
+  void navigateToResultPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ResultPage(bmiResult)),
+    );
   }
 }
